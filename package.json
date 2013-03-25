@@ -9,7 +9,7 @@
         "npm"      : "1.1.65"
     },
     "scripts"      : {
-        "start"    : "node app-server.js"
+        "start"    : "nodemon app-server.js"
     },
     "dependencies" : {
         "express"  : "latest"
