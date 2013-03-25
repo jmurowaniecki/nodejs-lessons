@@ -1,7 +1,8 @@
-nodejs-lessons
+NodeJS Lessons
 ==============
 
-Experimentations with NodeJS.
+Some personal experimentations with NodeJS.
+
 
 Install and Run
 ===============
@@ -11,14 +12,25 @@ To install (or update) the requirements of this package you'll need to execute `
 Todo:
 =====
 
+1. Create a simple webserver; done
+1.2. Creating routes to our application; done
+2. Handling files;
+2.1. Parsing files (using templates);
+3. Using Mongoose (MongoDB/NoSQL driver);
+3.1. Simple queryes;
+3.2. Complex queryes (populating collections);
+3.3. Twitter-like application;
+
+
 Create a simple webserver
 -------------------------
 Let's create a simple service using express. That's easy and there's a lot of documentation on the Internet.
 
 After execute `npm start` connect to your http://localhost:1313 to see the greetings message.
 
-Creating some routes to our application
----------------------------------------
+
+Creating routes to our application
+----------------------------------
 Our application need to be functional (non fiction), so we must add the functionalities. For this we'll create an about route and load the json package file to see how it works.
 
 Note that we've changed the package.json to start our script using nodemon.
