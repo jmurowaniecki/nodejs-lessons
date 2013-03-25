@@ -13,13 +13,13 @@ Todo:
 =====
 
 1. Create a simple webserver; done
-1.2. Creating routes to our application; done
-2. Handling files;
-2.1. Parsing files (using templates);
-3. Using Mongoose (MongoDB/NoSQL driver);
-3.1. Simple queryes;
-3.2. Complex queryes (populating collections);
-3.3. Twitter-like application;
+2. Creating routes to our application; done
+3. Handling files;
+4. Parsing files (using templates);
+5. Using Mongoose (MongoDB/NoSQL driver);
+6. Simple queryes;
+7. Complex queryes (populating collections);
+8. Twitter-like application;
 
 
 Create a simple webserver
