@@ -14,12 +14,12 @@ Todo:
 
 1. Create a simple webserver; done
 2. Creating routes to our application; done
-3. Handling files;
-4. Parsing files (using templates);
-5. Using Mongoose (MongoDB/NoSQL driver);
-6. Simple queryes;
-7. Complex queryes (populating collections);
-8. Twitter-like application;
+3. Handling files; done
+4. Using Mongoose (MongoDB/NoSQL driver);
+5. Complex queryes (populating collections);
+6. Twitter-like application;
+7. Using Backbone (MVC);
+8. Parsing files (using templates);
 
 
 Create a simple webserver
@@ -38,3 +38,8 @@ Note that we've changed the package.json to start our script using nodemon.
 If you want to start the script manually you should use `nodemon app-server.js` or the old-fashion way `node app-server.js`.
 
 So, now we have the http://localhost:1313/about that loads the data from our package.json, also we have the http://localhost:1313/mynameis/yourname that returns yourname as a simple example of uri parsing as our meeting page.
+
+
+Handling files
+--------------
+The application now can get a file and send to the client.
