@@ -1,8 +1,95 @@
 <html>
 <head>
+<<<<<<< HEAD
     <title>NodeJS Lessons</title>
 </head>
 <body>
     <h1>Welcome, stranger!</h1>
+=======
+    <title>Phantosh</title>
+    <style type="text/css">
+    * {
+        color: #9C9C9C;
+        background: transparent;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-family: Ubuntu Mono, Helvetica;
+    }
+    body {
+       background:#000000;
+    }
+    .messages {
+        display: block;
+        width:100%;
+        border: 1px solid #222;
+        border-top:1px solid #444;
+        background: #333;
+    }
+    .messages .message {
+        font-size:42px;
+        font-weight:bold;
+        text-transform:capitalize;
+        color:#777;
+        display:block;
+    }
+    .messages .author {
+        font-size:13px;
+        font-weight:100;
+        color:#666;
+        letter-spacing:3px;
+        -webkit-transition: all 1s linear;
+        -moz-transition: all 1s linear;
+        -o-transition: all 1s linear;
+        transition: all 1s linear;
+    }
+    .selected {
+        background:#FC0;
+        -webkit-transition: all 1s linear;
+        -moz-transition: all 1s linear;
+        -o-transition: all 1s linear;
+        transition: all 1s linear;
+    }
+    </style>
+</head>
+<body>
+    <div class="pannel">
+        {{content}}
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
+    <script>
+    var messages = {{messages}};
+
+    function putMessage (data, target) {
+        var messages = document.createElement('div'),
+            message = document.createElement('div'),
+            author = document.createElement('div');
+
+        messages.id = data._id;
+        messages.className = 'messages user-' + data.user._id;
+        message.className = 'message';
+        message.innerHTML = data.message;
+
+        author.className = 'author';
+        author.setAttribute('rel', 'user-' + data.user._id);
+        author.innerHTML = data.user.name;
+
+        messages.appendChild(message);;
+        messages.appendChild(author);;
+
+        $(target).prepend(messages);
+    }
+
+    $(document).ready(function () {
+        $(messages).each(function (i, e) {
+            if ( $('#' + e._id).attr('id') === e._id) return false;
+
+            putMessage(e, document.body);
+        });
+    });
+    </script>
+>>>>>>> mongoose
 </body>
 </html>
