@@ -15,7 +15,7 @@ app.configure(function () {
     app.set('port', 1313);
 });
 
-mongoose.connect('mongodb://localhost/faketwitter');
+mongoose.connect('mongodb://localhost/twitter');
 mongoose.connection.on('open', function () {
     console.log('mongoose openned..');
 });
@@ -51,9 +51,19 @@ app.get('/', function (req, res) {
             return res.end('Error loading index.html');
         }
         res.writeHead(200);
-        res.end(parseTextWithObject(data, {
-            content: 'Greetings, master!'
-        }));
+
+        Message
+        .find({}, null, {
+            sort : { 'date' : -1 }
+        })
+        .populate('user')
+        .limit(50)
+        .exec(function (err, messages) {
+            return res.end(parseTextWithObject(data, {
+                content  : "Loading messages",
+                messages : JSON.stringify(messages)
+            }));
+        });
     });
 });
 
