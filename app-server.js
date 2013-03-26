@@ -1,5 +1,6 @@
 var express = require('express'),
     http    = require('http'),
+    fs      = require('fs'),
     app     = express(),
     about   = require('./package.json'),
     server  = false;
@@ -12,7 +13,16 @@ app.configure(function () {
 
 // Welcome page
 app.get('/', function (req, res) {
-    res.end('Welcome! This webserver is running at ' + app.get('port'));
+    fs.readFile(__dirname + '/index.html', function (err, data) {
+        if (err) {
+            res.statusCode = 500;
+            // In some other examples we see res.writeHead(500)
+            // http://nodejs.org/api/http.html#http_response_writehead_statuscode_reasonphrase_headers
+            return res.end('Error while load index.html');
+        }
+        res.writeHead(200);
+        res.end(data);
+    });
 });
 
 // About page
