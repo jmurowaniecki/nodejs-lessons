@@ -12,6 +12,7 @@
         "start"    : "nodemon app-server.js"
     },
     "dependencies" : {
-        "express"  : "latest"
+        "express"  : "latest",
+        "mongoose" : "latest"
     }
 }
