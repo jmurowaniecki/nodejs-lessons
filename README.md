@@ -15,11 +15,12 @@ Todo:
 1. Create a simple webserver; done
 2. Creating routes to our application; done
 3. Handling files; done
-4. Parsing files (using templates);
-5. Using Mongoose (MongoDB/NoSQL driver);
-6. Complex queryes (populating collections);
-7. Twitter-like application;
-8. Using Backbone (MVC);
+4. Parsing files (using templates); done
+5. Using Mongoose (MongoDB/NoSQL driver); done
+6. Complex queryes (populating collections); done
+7. Using Socket.IO;
+8. Twitter-like application;
+9. Using Backbone (MVC);
 
 
 Create a simple webserver

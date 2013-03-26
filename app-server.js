@@ -86,6 +86,81 @@ app.get('/mynameis/:name', function (req, res) {
     res.end('Hello, ' + req.params.name + '!');
 });
 
+app.get('/whois/:user', function (req, res) {
+    fs.readFile(__dirname + '/index.html', function (err, data) {
+        if (err) {
+            res.writeHead(500);
+            return res.end('Error loading index.html');
+        }
+        res.writeHead(200);
+        User
+        .findOne({ name: req.params.user })
+        .exec(function (err, user) {
+            console.dir(user);
+            if (err || user === null)
+            {
+                return res.end(parseTextWithObject(data, {
+                    content  : 'Invalid user',
+                    messages : ''
+                }));
+            }
+            Message
+            .find({ user: user._id }, null, {
+                sort : { 'date' : 1 }
+            })
+            .populate('user')
+            .limit(50)
+            .exec(function (err, message) {
+                return res.end(parseTextWithObject(data, {
+                    content  : 'Loading messages',
+                    messages : JSON.stringify(message)
+                }));
+            });
+        });
+    });
+});
+
+
+app.get('/say/:user/:message', function (req, res) {
+    fs.readFile(__dirname + '/index.html', function (err, data) {
+        if (err) {
+            res.writeHead(500);
+            return res.end('Error loading index.html');
+        }
+        res.writeHead(200);
+
+        User.findOne({name:req.params.user}, function (err, UserExist) {
+            if (UserExist === null) {
+                var newUser = new User({ name:req.params.user });
+                newUser.save(function (err, UserExist) {
+                    var newMsg = new Message({ message: req.params.message, user: UserExist });
+                    newMsg.save(function(err, MsgData){
+                        newUser.messages.push(MsgData._id);
+                        newUser.save(function(){
+                            return res.end(parseTextWithObject(data, {
+                                content  : 'Saving message from ' + req.params.user,
+                                messages : ''
+                            }));
+                        });
+                    });
+                });
+            }
+            else {
+                var newMsg = new Message({ message: req.params.message, user: UserExist });
+                newMsg.save(function(err, MsgData){
+                    console.dir(req.params.user);
+                    UserExist.messages.push(MsgData._id);
+                    UserExist.save(function(){
+                        return res.end(parseTextWithObject(data, {
+                            content  : 'Saving message from ' + req.params.user,
+                            messages : ''
+                        }));
+                    });
+                });
+            }
+        });
+    });
+});
 // Default 404 error page routing
 app.get('*', function (req, res) {
     res.send('Unknow page ' + req.params, 404);
