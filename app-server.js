@@ -7,9 +7,8 @@ var express  = require('express'),
     mongoose = require('mongoose'),
     db       = mongoose.createConnection('localhost', 'twitter'),
     Schema   = mongoose.Schema,
-    ObjectId = mongoose.Schema.Types.ObjectId;
-
-console.log('Configuring app.');
+    ObjectId = mongoose.Schema.Types.ObjectId,
+    io       = require('socket.io').listen(8000);
 
 app.configure(function () {
     app.set('port', 1313);
@@ -51,7 +50,6 @@ app.get('/', function (req, res) {
             return res.end('Error loading index.html');
         }
         res.writeHead(200);
-
         Message
         .find({}, null, {
             sort : { 'date' : -1 }
@@ -86,6 +84,7 @@ app.get('/mynameis/:name', function (req, res) {
     res.end('Hello, ' + req.params.name + '!');
 });
 
+// about user
 app.get('/whois/:user', function (req, res) {
     fs.readFile(__dirname + '/index.html', function (err, data) {
         if (err) {
@@ -120,7 +119,7 @@ app.get('/whois/:user', function (req, res) {
     });
 });
 
-
+// save message
 app.get('/say/:user/:message', function (req, res) {
     fs.readFile(__dirname + '/index.html', function (err, data) {
         if (err) {
@@ -128,7 +127,6 @@ app.get('/say/:user/:message', function (req, res) {
             return res.end('Error loading index.html');
         }
         res.writeHead(200);
-
         User.findOne({name:req.params.user}, function (err, UserExist) {
             if (UserExist === null) {
                 var newUser = new User({ name:req.params.user });
@@ -137,10 +135,21 @@ app.get('/say/:user/:message', function (req, res) {
                     newMsg.save(function(err, MsgData){
                         newUser.messages.push(MsgData._id);
                         newUser.save(function(){
-                            return res.end(parseTextWithObject(data, {
-                                content  : 'Saving message from ' + req.params.user,
-                                messages : ''
-                            }));
+                            Message
+                            .find({}, null, {
+                                sort : { 'date' : -1 }
+                            })
+                            .populate('user')
+                            .limit(5)
+                            .exec(function (err, messages) {
+                                io.sockets.emit('feed', {
+                                    messages : messages
+                                });
+                                return res.end(parseTextWithObject(data, {
+                                    content  : 'Saving message from ' + req.params.user,
+                                    messages : ''
+                                }));
+                            });
                         });
                     });
                 });
@@ -151,16 +160,39 @@ app.get('/say/:user/:message', function (req, res) {
                     console.dir(req.params.user);
                     UserExist.messages.push(MsgData._id);
                     UserExist.save(function(){
-                        return res.end(parseTextWithObject(data, {
-                            content  : 'Saving message from ' + req.params.user,
-                            messages : ''
-                        }));
+                        Message
+                        .find({}, null, {
+                            sort : { 'date' : -1 }
+                        })
+                        .populate('user')
+                        .limit(5)
+                        .exec(function (err, messages) {
+                            io.sockets.emit('feed', {
+                                messages : messages
+                            });
+                            return res.end(parseTextWithObject(data, {
+                                content  : 'Saving message from ' + req.params.user,
+                                messages : ''
+                            }));
+                        });
                     });
                 });
             }
         });
     });
 });
+
+// Show messages
+app.get('/messages', function (req, res) {
+    Message
+    .find({})
+    .populate('user')
+    .limit(50)
+    .exec(function (err, asd) {
+        res.send(asd);
+    });
+});
+
 // Default 404 error page routing
 app.get('*', function (req, res) {
     res.send('Unknow page ' + req.params, 404);
@@ -172,12 +204,22 @@ server.listen(app.get('port'), function () {
     console.log('Starting service at ' + app.get('port'));
 });
 
-function loadFile (filename, parseWith) {
+io.sockets.on('connection', function (socket) {
+    socket.on('feed', function (data) {
+        Message
+        .find({})
+        .populate('user')
+        .limit(5)
+        .exec(function (err, data) {
+            socket.broadcast.emit('feed', {
+             msg : data
+          });
+       });
+   });
 
-}
+});
 
 function parseTextWithObject (text, object) {
-    console.log('parsing');
     for (i in object) {
         text = text.toString().replace('{{' + i + '}}', object[i]);
     }
