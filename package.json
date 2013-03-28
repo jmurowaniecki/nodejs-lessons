@@ -1,18 +1,19 @@
 {
-    "name"         : "nodejs-lessons",
-    "description"  : "Experimentations with NodeJS - learning the basics",
-    "version"      : "0.0.1",
-    "private"      : false,
-    "author"       : "John Murowaniecki <jmurowaniecki@gmail.com> (http://jmurowaniecki.github.com)",
-    "engines"      : {
-        "node"     : "0.8.14",
-        "npm"      : "1.1.65"
+    "name"          : "nodejs-lessons",
+    "description"   : "Experimentations with NodeJS - learning the basics",
+    "version"       : "0.0.1",
+    "private"       : false,
+    "author"        : "John Murowaniecki <jmurowaniecki@gmail.com> (http://jmurowaniecki.github.com)",
+    "engines"       : {
+        "node"      : "0.8.14",
+        "npm"       : "1.1.65"
     },
-    "scripts"      : {
-        "start"    : "nodemon app-server.js"
+    "scripts"       : {
+        "start"     : "nodemon app-server.js"
     },
-    "dependencies" : {
-        "express"  : "latest",
-        "mongoose" : "latest"
+    "dependencies"  : {
+        "express"   : "latest",
+        "mongoose"  : "latest",
+        "socket.io" : "latest"
     }
 }

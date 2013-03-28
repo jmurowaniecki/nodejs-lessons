@@ -51,10 +51,31 @@
         {{content}}
     </div>
 
+    <script src="http://localhost:8000/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
     <script>
-    var messages = {{messages}};
+    var socket = io.connect('http://localhost:8000');
+    $(document).ready(function () {
+        socket.on('feed', function (data) {
+            $(data.messages).each(function (i, e) {
+                if ( $('#' + e._id).attr('id') === e._id) return false;
+                putMessage(e, document.body);
+            });
+        });
+
+        $.get('http://localhost:1313/messages', function (data) {
+            $(data).each(function (i, e) {
+                if ( $('#' + e._id).attr('id') === e._id) return false;
+                putMessage(e, document.body);
+            });
+        });
+
+        $('.author').live('click', function() {
+            $('.messages').removeClass('selected');
+            $('.' + $(this).attr('rel')).addClass('selected');
+        });
+    });
 
     function putMessage (data, target) {
         var messages = document.createElement('div'),
@@ -75,14 +96,6 @@
 
         $(target).prepend(messages);
     }
-
-    $(document).ready(function () {
-        $(messages).each(function (i, e) {
-            if ( $('#' + e._id).attr('id') === e._id) return false;
-
-            putMessage(e, document.body);
-        });
-    });
     </script>
 </body>
 </html>
