@@ -21,7 +21,12 @@ mongoose.connection.on('open', function () {
 
 
 var UserSchema = new Schema({
-    name     : String,
+    name          : String,
+    password      : String,
+    message_count : {
+        type      : Number,
+        default   : 0
+    },
     messages : [{
         type: Schema.ObjectId,
         ref: 'Message'
@@ -134,7 +139,7 @@ app.get('/say/:user/:message', function (req, res) {
                     var newMsg = new Message({ message: req.params.message, user: UserExist });
                     newMsg.save(function(err, MsgData){
                         newUser.messages.push(MsgData._id);
-                        newUser.save(function(){
+                        newUser.save(function() {
                             Message
                             .find({}, null, {
                                 sort : { 'date' : -1 }
@@ -157,9 +162,8 @@ app.get('/say/:user/:message', function (req, res) {
             else {
                 var newMsg = new Message({ message: req.params.message, user: UserExist });
                 newMsg.save(function(err, MsgData){
-                    console.dir(req.params.user);
                     UserExist.messages.push(MsgData._id);
-                    UserExist.save(function(){
+                    UserExist.save(function() {
                         Message
                         .find({}, null, {
                             sort : { 'date' : -1 }
@@ -192,6 +196,15 @@ app.get('/messages', function (req, res) {
         res.send(asd);
     });
 });
+
+// test case
+app.get('/set/:user/:message', function (req, res) {
+    //
+    User.update({ name: req.params.user }, { $inc : { message_count: 1 } }, function () {
+        res.end('(:');
+    });
+});
+
 
 // Default 404 error page routing
 app.get('*', function (req, res) {
